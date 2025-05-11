@@ -1,5 +1,7 @@
 import SearchForm from "@/components/SearchForm";
 import StartupCard, { StartupTypeCard } from "@/components/StartupCard";
+import { sanityFetch, SanityLive } from "@/sanity/lib/live";
+import { STARTUPS_QUERY } from "@/sanity/lib/queries";
 
 export default async function Home({
   searchParams,
@@ -7,6 +9,8 @@ export default async function Home({
   searchParams: Promise<{ query?: string }>;
 }) {
   const query = (await searchParams).query;
+  const params = { search: query || null };
+  const { data: posts } = await sanityFetch({ query: STARTUPS_QUERY, params });
 
   return (
     <div>
@@ -21,7 +25,7 @@ export default async function Home({
           Competitions.
         </p>
 
-        <SearchForm query={query}/>
+        <SearchForm query={query} />
       </section>
 
       <section className="section_container">
@@ -39,20 +43,8 @@ export default async function Home({
           )}
         </ul>
       </section>
+
+      <SanityLive />
     </div>
   );
 }
-
-const posts = [
-  {
-    _createdAt: "Yesterday",
-    views: 55,
-    author: { _id: 1 },
-    _id: 1,
-    description: "This is a description",
-    image:
-      "https://images.unsplash.com/photo-1634912314704-c646c586b131?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0З&¡X¡d=M3wxM¡AЗfDB8MНxwaG90by1wYWdlfHx8fGVufDB8fHx8fА%ЗD%ЗD",
-    category: "Robots",
-    title: "We Robots",
-  },
-] as StartupTypeCard;
